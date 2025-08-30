@@ -1,0 +1,73 @@
+/* Login Card */
+.login-card {
+  max-width: 450px;
+  margin: 50px auto;
+  background-color: #fff;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+}
+
+/* Card Header */
+.login-card .card-header {
+  background: linear-gradient(90deg, #4caf50, #2e7d32);
+  color: #fff;
+  padding: 25px 20px;
+  text-align: center;
+}
+
+.login-card .card-header h2 {
+  margin-bottom: 5px;
+}
+
+.login-card .card-header p {
+  font-size: 0.95rem;
+  margin-bottom: 0;
+}
+
+/* Card Body */
+.login-card .card-body {
+  padding: 25px 20px;
+}
+
+/* Input Fields */
+.login-card .form-control {
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 1rem;
+  border: 1px solid #ced4da;
+  transition: all 0.3s ease;
+}
+
+.login-card .form-control:focus {
+  border-color: #4caf50;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.4);
+}
+
+/* Button */
+.login-card .btn-success {
+  background-color: #ffeb3b;
+  color: #2e7d32;
+  font-weight: bold;
+  padding: 12px 25px;
+  border-radius: 30px;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.login-card .btn-success:hover {
+  background-color: #fdd835;
+  transform: translateY(-2px);
+}
+
+/* Alert */
+.login-card .alert {
+  border-radius: 10px;
+  font-size: 0.9rem;
+}

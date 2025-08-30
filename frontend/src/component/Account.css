@@ -1,0 +1,62 @@
+/* Container */
+.account-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 0 15px;
+}
+
+/* Card Style */
+.account-card {
+  background-color: #f9fff9;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+/* Page Title */
+.account-container h2 {
+  color: #2e7d32;
+  font-weight: 700;
+}
+
+/* Input Fields */
+.account-card .form-control {
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  padding: 10px 12px;
+  transition: 0.3s;
+}
+
+.account-card .form-control:focus {
+  border-color: #4caf50;
+  box-shadow: 0 0 6px rgba(76, 175, 80, 0.3);
+}
+
+/* Update Button */
+.btn-update {
+  background-color: #4caf50;
+  color: white;
+  font-weight: bold;
+  padding: 12px;
+  border-radius: 30px;
+  transition: all 0.3s ease;
+}
+
+.btn-update:hover {
+  background-color: #2e7d32;
+  transform: translateY(-2px);
+}
+
+/* Centered messages */
+.center-text {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #555;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .account-card {
+    padding: 20px;
+  }
+}

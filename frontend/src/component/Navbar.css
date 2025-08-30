@@ -1,0 +1,123 @@
+/* Navbar Gradient and Shadow */
+.custom-navbar {
+  background: linear-gradient(90deg, #4caf50, #2e7d32);
+  padding: 0.8rem 1rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+/* Brand Style */
+.custom-navbar .navbar-brand {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+.custom-navbar .navbar-brand:hover {
+  color: #ffeb3b;
+  transition: 0.3s;
+}
+
+/* Nav Link Style */
+.custom-navbar .nav-link {
+  color: #e0f2f1;
+  margin-right: 0.5rem;
+  position: relative;
+  transition: 0.3s;
+}
+
+.custom-navbar .nav-link:hover {
+  color: #fff;
+}
+
+.custom-navbar .nav-link::after {
+  content: "";
+  display: block;
+  width: 0%;
+  height: 2px;
+  background: #ffeb3b;
+  transition: width 0.3s;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.custom-navbar .nav-link:hover::after {
+  width: 100%;
+}
+
+/* Username Style */
+.username {
+  font-weight: 600;
+  color: #fff;
+}
+
+/* Yellow Button */
+.btn-yellow {
+  background-color: #ffeb3b;
+  color: #2e7d32;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  padding: 0.4rem 0.8rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  box-shadow: 0 4px #c6b800;
+}
+
+.btn-yellow:hover {
+  background-color: #fff176;
+  transform: translateY(-2px);
+  box-shadow: 0 6px #c6b800;
+}
+
+.btn-yellow:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px #c6b800;
+}
+
+/* Modern Hamburger Toggler */
+.custom-toggler {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 35px;           /* slightly wider */
+  height: 28px;          /* slightly taller */
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.custom-toggler div {
+  width: 100%;
+  height: 4px;           /* thicker bars */
+  background-color: #fff;
+  border-radius: 3px;    /* rounded edges */
+  box-shadow:none !important; /* subtle shadow */
+  transition: all 0.4s ease;
+}
+
+/* Animate Hamburger to X */
+.custom-toggler.open .bar1 {
+  transform: rotate(45deg) translate(6px, 6px);
+}
+
+.custom-toggler.open .bar2 {
+  opacity: 0;
+}
+
+.custom-toggler.open .bar3 {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* Hover Effect for Hamburger */
+.custom-toggler:hover div {
+  background-color: #ffeb3b;
+}
+
+/* Optional: Smooth collapse animation for mobile menu */
+.collapse.navbar-collapse {
+  transition: max-height 0.4s ease;
+}

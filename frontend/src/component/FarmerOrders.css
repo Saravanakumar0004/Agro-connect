@@ -1,0 +1,101 @@
+/* Container Card */
+.orders-container {
+  max-width: 1000px;
+  margin: 30px auto;
+  padding: 25px 30px;
+  background-color: #f9fff9;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+/* Page Title */
+.orders-container h2 {
+  text-align: center;
+  color: #2e7d32;
+  font-weight: 700;
+  margin-bottom: 25px;
+}
+
+/* Table Wrapper */
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.orders-table th,
+.orders-table td {
+  text-align: center;
+  padding: 12px 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+.orders-table th {
+  background-color: #4caf50;
+  color: #fff;
+  font-weight: 600;
+}
+
+.orders-table tbody tr:nth-child(even) {
+  background-color: #f3f9f3;
+}
+
+.orders-table tbody tr:hover {
+  background-color: #e0f2e0;
+  transition: 0.3s;
+}
+
+/* Status Badges */
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  color: #fff;
+  text-transform: capitalize;
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.status-badge.pending { background-color: #ff9800; }
+.status-badge.shipped { background-color: #1976d2; }
+.status-badge.cancelled { background-color: #d32f2f; }
+.status-badge.delivered { background-color:#4caf50; } 
+
+
+/* Shipped Button */
+.btn-shipped {
+  background-color: #2e7d32;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: 0.3s;
+}
+
+.btn-shipped:hover {
+  background-color: #1b4d20;
+}
+
+/* Centered text for messages */
+.center-text {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #555;
+  margin-top: 20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .orders-table th, .orders-table td {
+    padding: 8px 5px;
+    font-size: 0.85rem;
+  }
+
+  .orders-container {
+    padding: 20px 15px;
+  }
+}

@@ -1,0 +1,110 @@
+/* Container Card */
+.order-card {
+  max-width: 800px; /* Increased width */
+  margin: 0 auto;
+  background-color: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.order-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+}
+
+/* Card Header */
+.order-card .card-header {
+  background: linear-gradient(90deg, #4caf50, #2e7d32);
+  color: #fff;
+  padding: 25px 20px;
+  text-align: center;
+}
+
+.order-card .card-header h2 {
+  margin-bottom: 5px;
+  color: #fdd835;
+  }
+
+.order-card .card-header p {
+  font-size: 0.95rem;
+  margin-bottom: 0;
+}
+
+/* Card Body */
+.order-card .card-body {
+  padding: 25px 20px;
+}
+
+/* Product Preview */
+.product-preview .preview-img {
+  max-width: 250px; /* Slightly bigger image */
+  max-height: 250px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 2px solid #4caf50;
+  transition: transform 0.3s ease;
+}
+.product-preview .preview-title{
+    margin-top: 15px;
+    text-transform: uppercase;
+    color: black !important;
+    font-weight: bold;
+}
+.product-preview .text-success{
+    font-size: 20px !important;
+    color: black    !important;
+}
+
+
+/* Input Fields */
+.order-card .form-control {
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 1rem;
+  border: 1px solid #ced4da;
+  transition: all 0.3s ease;
+}
+
+.order-card .form-control:focus {
+  border-color: #4caf50;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.4);
+}
+
+/* Button */
+.order-card .btn-success {
+  background-color: #ffeb3b;
+  color: #2e7d32;
+  font-weight: bold;
+  padding: 12px 25px;
+  border-radius: 30px;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.order-card .btn-success:hover {
+  background-color: #fdd835;
+  transform: translateY(-3px);
+}
+
+/* Farmer Card */
+.farmer-card {
+  border-radius: 10px;
+  background-color: #aaf3a7;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  height: 180px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.farmer-card:hover {
+  transform: translateY(-2px);
+}
+
+/* Centered text for loading/error */
+.center-text {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #555;
+  margin-top: 30px;
+}

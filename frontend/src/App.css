@@ -1,0 +1,173 @@
+/* ===== Global Website Background ===== */
+body {
+  background-color: #d1dd8ba1;  /* light greenish background */
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+
+/* ===== Navbar ===== */
+.custom-navbar {
+  background: linear-gradient(90deg, #4caf50, #2e7d32);
+  padding: 0.8rem 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.custom-navbar .navbar-brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #fff !important;
+  transition: color 0.3s ease;
+}
+
+.custom-navbar .navbar-brand:hover {
+  color: #ffeb3b !important;
+}
+
+.custom-navbar .nav-link {
+  color: #fff !important;
+  margin-left: 15px;
+  transition: color 0.3s ease;
+}
+
+.custom-navbar .nav-link:hover {
+  color: #ffeb3b !important;
+}
+
+/* ===== Hero Section ===== */
+/* ===== Hero Section ===== */
+.hero {
+  background: url('/wp2024187.jpg') no-repeat center center;
+  background-size: cover;
+  color: white;
+  border-radius: 10px;
+  height: 70vh;       /* Full screen height */
+  width: 100%;         /* Full width */
+  display: flex;       /* Flexbox for centering */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+  margin-bottom: 50px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 1;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* dark overlay */
+  border-radius: 10px;
+  z-index: -1;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+.hero p {
+  font-size: 1.25rem;
+  margin-top: 10px;
+}
+
+
+/* Yellow Browse Button */
+.btn-browse {
+  background-color: #ffeb3b !important;
+  color: #2e7d32 !important;
+  font-weight: bold;
+  padding: 10px 25px;
+  border-radius: 30px;
+  transition: all 0.3s ease;
+}
+
+.btn-browse:hover {
+  background-color: #fdd835 !important;
+  transform: translateY(-2px);
+}
+
+/* ===== Why AgroLink Section ===== */
+.why-agrolink h2 {
+  font-weight: bold;
+  color:#2e7d32;
+}
+
+.why-agrolink .col-md-4 {
+  padding: 40px;
+  border-radius: 12px;
+  transition: transform 0.3s ease;
+  margin: 10px 0;
+}
+
+.why-agrolink .col-md-4:hover {
+  transform: translateY(-5px);
+}
+
+.why-agrolink i {
+  color: #4caf50;
+}
+
+/* ===== How It Works ===== */
+.how-it-works h2 {
+  font-weight: bold;
+  color:#2e7d32;
+}
+
+.how-it-works .col-md-4 {
+  padding: 25px;
+  border-radius: 12px;
+  transition: transform 0.3s ease;
+  margin: 15px 0;
+}
+
+.how-it-works .col-md-4:nth-child(even) {
+  margin-top: 30px; /* extra margin for even */
+}
+
+.how-it-works .col-md-4:hover {
+  transform: translateY(-5px);
+}
+
+/* ===== Featured Products ===== */
+.featured-products h2 {
+  font-weight: bold;
+  color:#2e7d32;
+  margin-bottom: 30px;
+}
+
+/* ===== Call to Action ===== */
+.cta {
+  background: linear-gradient(90deg, #2e7d32, #4caf50);
+  color: white;
+  border-radius: 12px;
+  padding: 60px 20px;
+  margin-top: 60px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.cta h3 {
+  font-weight: bold;
+  
+}
+
+.cta p {
+  font-size: 1.1rem;
+}
+
+.cta .btn {
+  border-radius: 30px;
+  padding: 10px 25px;
+  font-weight: bold;
+  transition: transform 0.3s ease;
+}
+
+.cta .btn:hover {
+  transform: translateY(-3px);
+}
