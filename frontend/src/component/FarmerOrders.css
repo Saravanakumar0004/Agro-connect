@@ -1,101 +1,608 @@
-/* Container Card */
-.orders-container {
-  max-width: 1000px;
-  margin: 30px auto;
-  padding: 25px 30px;
-  background-color: #f9fff9;
-  border-radius: 12px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+/* ============================================
+   FARMERORDERS.CSS — Pro Level UI
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+body {
+  background: #f4faf4;
+  background-image:
+    radial-gradient(ellipse at 12% 20%, rgba(76,175,80,0.09) 0%, transparent 50%),
+    radial-gradient(ellipse at 88% 78%, rgba(46,125,50,0.07) 0%, transparent 50%);
+  background-attachment: fixed;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
 }
 
-/* Page Title */
-.orders-container h2 {
+/* ── Wrapper ── */
+.ford-wrapper {
+  max-width: 1060px;
+  margin: 52px auto 88px;
+  padding: 0 18px;
+}
+
+/* ── Loading ── */
+.ford-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  gap: 16px;
+  color: #4a6a4a;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.ford-spinner {
+  width: 40px; height: 40px;
+  border: 3.5px solid rgba(76,175,80,0.2);
+  border-top-color: #4caf50;
+  border-radius: 50%;
+  animation: ford-spin 0.75s linear infinite;
+}
+
+@keyframes ford-spin { to { transform: rotate(360deg); } }
+
+/* ── Empty / Error ── */
+.ford-empty {
   text-align: center;
+  padding: 80px 24px;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.ford-empty-icon {
+  font-size: 3.5rem;
+  margin-bottom: 16px;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.08));
+}
+
+.ford-empty h3 {
+  font-weight: 900;
+  color: #1b5e20;
+  font-size: 1.4rem;
+  margin-bottom: 8px;
+}
+
+.ford-empty p {
+  color: #6a8a6a;
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+/* ── Alert ── */
+.ford-alert {
+  background: linear-gradient(135deg, #ffebee, #fff5f5);
+  color: #c62828;
+  border: 1.5px solid rgba(198,40,40,0.22);
+  border-radius: 12px;
+  padding: 12px 18px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+/* ── Page Header ── */
+.ford-page-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 28px 32px;
+  background: linear-gradient(135deg, #1a3d1a 0%, #2e7d32 55%, #388e3c 100%);
+  border-radius: 22px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 16px 48px rgba(20,70,20,0.32),
+    inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+.ford-page-header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 36px 36px;
+  border-radius: 22px;
+  pointer-events: none;
+}
+
+.ford-page-header::after {
+  content: "";
+  position: absolute;
+  width: 240px; height: 240px;
+  background: radial-gradient(circle, rgba(255,235,59,0.1) 0%, transparent 70%);
+  top: -80px; right: -60px;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.ford-page-header-icon {
+  font-size: 2.4rem;
+  line-height: 1;
+  filter: drop-shadow(0 3px 8px rgba(0,0,0,0.2));
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+}
+
+.ford-header-text {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.ford-header-text h1 {
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: #fff;
+  margin: 0 0 4px;
+  letter-spacing: -0.3px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.ford-header-text p {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.65);
+  margin: 0;
+}
+
+/* Revenue + Order count pills */
+.ford-header-meta {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 16px;
+  padding: 12px 20px;
+  backdrop-filter: blur(6px);
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+}
+
+.ford-header-stat {
+  text-align: center;
+  padding: 0 14px;
+}
+
+.ford-header-stat span {
+  display: block;
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: #ffe033;
+  line-height: 1;
+  letter-spacing: -0.5px;
+}
+
+.ford-header-stat p {
+  margin: 3px 0 0;
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.6);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.ford-header-divider {
+  width: 1px;
+  height: 32px;
+  background: rgba(255,255,255,0.2);
+}
+
+/* ── Stats Row ── */
+.ford-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.ford-stat {
+  background: rgba(255,255,255,0.88);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 16px 12px;
+  text-align: center;
+  border: 1.5px solid rgba(76,175,80,0.12);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transition: transform 0.25s ease;
+}
+
+.ford-stat:hover { transform: translateY(-3px); }
+
+.ford-stat-icon { font-size: 1.3rem; line-height: 1; }
+
+.ford-stat-num {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #1b5e20;
+  line-height: 1;
+}
+
+.ford-stat-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #7a9a7a;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.ford-stat--pending   { border-top: 3px solid #ff9800; }
+.ford-stat--shipped   { border-top: 3px solid #1976d2; }
+.ford-stat--delivered { border-top: 3px solid #4caf50; }
+.ford-stat--cancelled { border-top: 3px solid #d32f2f; }
+
+/* ── Filter Tabs ── */
+.ford-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+}
+
+.ford-filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 50px;
+  border: 1.5px solid rgba(76,175,80,0.2);
+  background: rgba(255,255,255,0.8);
+  color: #4a6a4a;
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: all 0.22s ease;
+}
+
+.ford-filter-btn:hover {
+  border-color: #4caf50;
+  background: rgba(232,245,233,0.8);
   color: #2e7d32;
+}
+
+.ford-filter-btn--active {
+  background: linear-gradient(135deg, #4caf50, #2e7d32) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+  box-shadow: 0 4px 14px rgba(46,125,50,0.35);
+}
+
+.ford-filter-count {
+  background: rgba(255,255,255,0.25);
+  border-radius: 50px;
+  padding: 1px 7px;
+  font-size: 0.72rem;
   font-weight: 700;
-  margin-bottom: 25px;
 }
 
-/* Table Wrapper */
-.table-wrapper {
-  overflow-x: auto;
+.ford-filter-btn:not(.ford-filter-btn--active) .ford-filter-count {
+  background: rgba(76,175,80,0.12);
+  color: #4caf50;
 }
 
-.orders-table {
+/* ── Table Wrapper ── */
+.ford-table-wrap {
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  border: 1.5px solid rgba(76,175,80,0.14);
+  overflow: hidden;
+  box-shadow:
+    0 6px 28px rgba(46,125,50,0.09),
+    inset 0 1px 0 rgba(255,255,255,0.95);
+}
+
+/* ── Table ── */
+.ford-table {
   width: 100%;
   border-collapse: collapse;
 }
 
-.orders-table th,
-.orders-table td {
-  text-align: center;
-  padding: 12px 15px;
-  border-bottom: 1px solid #ddd;
+.ford-table thead tr {
+  background: linear-gradient(135deg, #1b5e20, #2e7d32);
 }
 
-.orders-table th {
-  background-color: #4caf50;
-  color: #fff;
+.ford-table th {
+  padding: 14px 16px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.85);
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  white-space: nowrap;
+}
+
+.ford-table th:first-child { padding-left: 22px; }
+.ford-table th:last-child  { padding-right: 22px; text-align: center; }
+
+.ford-table td {
+  padding: 14px 16px;
+  font-size: 0.88rem;
+  color: #2a3a2a;
+  border-bottom: 1px solid rgba(76,175,80,0.08);
+  vertical-align: middle;
+}
+
+.ford-table td:first-child { padding-left: 22px; }
+.ford-table td:last-child  { padding-right: 22px; text-align: center; }
+
+.ford-table tbody tr:last-child td { border-bottom: none; }
+
+.ford-table tbody tr {
+  transition: background 0.18s ease;
+}
+
+.ford-table tbody tr:hover {
+  background: rgba(232,245,233,0.6);
+}
+
+/* Row left strip per status */
+.ford-row--pending td:first-child   { border-left: 3px solid #ff9800; }
+.ford-row--shipped td:first-child   { border-left: 3px solid #1976d2; }
+.ford-row--delivered td:first-child { border-left: 3px solid #4caf50; }
+.ford-row--cancelled td:first-child { border-left: 3px solid #d32f2f; }
+
+/* Product cell */
+.ford-product-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  color: #1b5e20;
+}
+
+.ford-product-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.ford-dot--green { background: #4caf50; }
+
+/* Price */
+.ford-price {
+  font-weight: 700;
+  color: #2e7d32;
+}
+
+/* Qty pill */
+.ford-qty-pill {
+  display: inline-block;
+  background: rgba(76,175,80,0.1);
+  color: #1b5e20;
+  border: 1px solid rgba(76,175,80,0.2);
+  border-radius: 50px;
+  padding: 2px 10px;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.ford-customer { font-weight: 600; color: #2a3a2a; }
+
+.ford-phone {
+  font-size: 0.82rem;
+  color: #6a8a6a;
+}
+
+.ford-address {
+  font-size: 0.82rem;
+  color: #6a8a6a;
+  max-width: 140px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Status Badge ── */
+.ford-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  border-radius: 50px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.ford-status--pending {
+  background: rgba(255,152,0,0.12);
+  color: #e65100;
+  border: 1px solid rgba(255,152,0,0.28);
+}
+
+.ford-status--shipped {
+  background: rgba(25,118,210,0.1);
+  color: #0d47a1;
+  border: 1px solid rgba(25,118,210,0.24);
+}
+
+.ford-status--delivered {
+  background: rgba(76,175,80,0.12);
+  color: #1b5e20;
+  border: 1px solid rgba(76,175,80,0.26);
+}
+
+.ford-status--cancelled {
+  background: rgba(211,47,47,0.1);
+  color: #b71c1c;
+  border: 1px solid rgba(211,47,47,0.22);
+}
+
+/* ── Action Labels ── */
+.ford-shipped-label,
+.ford-delivered-label,
+.ford-cancelled-label {
+  font-size: 0.78rem;
   font-weight: 600;
+  color: #9aaa9a;
 }
 
-.orders-table tbody tr:nth-child(even) {
-  background-color: #f3f9f3;
-}
+.ford-delivered-label { color: #4caf50; }
+.ford-cancelled-label { color: #d32f2f; opacity: 0.7; }
 
-.orders-table tbody tr:hover {
-  background-color: #e0f2e0;
-  transition: 0.3s;
-}
-
-/* Status Badges */
-.status-badge {
-  padding: 4px 10px;
-  border-radius: 12px;
-  color: #fff;
-  text-transform: capitalize;
-  font-weight: bold;
-  margin-right: 5px;
-}
-
-.status-badge.pending { background-color: #ff9800; }
-.status-badge.shipped { background-color: #1976d2; }
-.status-badge.cancelled { background-color: #d32f2f; }
-.status-badge.delivered { background-color:#4caf50; } 
-
-
-/* Shipped Button */
-.btn-shipped {
-  background-color: #2e7d32;
-  color: #fff;
-  padding: 4px 8px;
-  border-radius: 6px;
+/* ── Ship Button ── */
+.ford-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 7px 14px;
+  border-radius: 50px;
   border: none;
+  font-size: 0.8rem;
+  font-weight: 700;
+  font-family: 'Inter', sans-serif;
   cursor: pointer;
-  font-size: 0.85rem;
-  transition: 0.3s;
+  transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
+  white-space: nowrap;
 }
 
-.btn-shipped:hover {
-  background-color: #1b4d20;
+.ford-btn--ship {
+  background: linear-gradient(135deg, #1976d2, #0d47a1);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(25,118,210,0.35);
 }
 
-/* Centered text for messages */
-.center-text {
-  text-align: center;
-  font-size: 1.1rem;
-  color: #555;
-  margin-top: 20px;
+.ford-btn--ship:hover {
+  background: linear-gradient(135deg, #2196f3, #1565c0);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(25,118,210,0.45);
 }
 
-/* Responsive */
+.ford-btn--ship:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.ford-btn--full { width: 100%; margin-top: 12px; }
+
+/* Button spinner */
+.ford-btn-spinner {
+  width: 13px; height: 13px;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: ford-spin 0.7s linear infinite;
+  display: inline-block;
+}
+
+/* ── Mobile Cards (hidden on desktop) ── */
+.ford-mobile-list { display: none; }
+
+.ford-mobile-card {
+  background: rgba(255,255,255,0.92);
+  border-radius: 18px;
+  border: 1.5px solid rgba(76,175,80,0.13);
+  padding: 18px 20px;
+  margin-bottom: 12px;
+  box-shadow: 0 3px 14px rgba(0,0,0,0.06);
+  position: relative;
+  overflow: hidden;
+}
+
+.ford-mobile--pending   { border-left: 4px solid #ff9800; }
+.ford-mobile--shipped   { border-left: 4px solid #1976d2; }
+.ford-mobile--delivered { border-left: 4px solid #4caf50; }
+.ford-mobile--cancelled { border-left: 4px solid #d32f2f; }
+
+.ford-mobile-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.ford-mobile-product {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ford-product-icon {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(46,125,50,0.12);
+}
+
+.ford-mobile-product h5 {
+  font-weight: 800;
+  color: #1b5e20;
+  font-size: 0.95rem;
+  margin: 0 0 3px;
+}
+
+.ford-mobile-price {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #4caf50;
+  margin: 0;
+}
+
+.ford-mobile-details {
+  background: rgba(232,245,233,0.4);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-bottom: 4px;
+}
+
+.ford-mobile-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.82rem;
+  color: #4a6a4a;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.ford-mobile-address {
+  font-size: 0.8rem;
+  color: #6a8a6a;
+}
+
+/* ── Responsive ── */
 @media (max-width: 768px) {
-  .orders-table th, .orders-table td {
-    padding: 8px 5px;
-    font-size: 0.85rem;
+  .ford-wrapper { margin: 32px auto 60px; padding: 0 14px; }
+
+  .ford-page-header {
+    flex-wrap: wrap;
+    padding: 22px 20px;
+    border-radius: 16px;
+    gap: 12px;
   }
 
-  .orders-container {
-    padding: 20px 15px;
+  .ford-header-meta {
+    width: 100%;
+    justify-content: center;
   }
+
+  .ford-stats { grid-template-columns: repeat(2, 1fr); }
+
+  /* Hide table, show cards on mobile */
+  .ford-table-wrap { display: none; }
+  .ford-mobile-list { display: block; }
+
+  .ford-filters { gap: 6px; }
+  .ford-filter-btn { padding: 6px 10px; font-size: 0.76rem; }
 }
