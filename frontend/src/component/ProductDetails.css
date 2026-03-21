@@ -1,89 +1,536 @@
-/* Container */
-.product-details-container {
-  max-width: 1100px;
-  margin: 20px auto;
-  padding: 15px;
+/* ============================================
+   PRODUCTDETAILS.CSS — Pro Level UI
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+body {
+  background: #f4faf4;
+  background-image:
+    radial-gradient(ellipse at 10% 20%, rgba(76,175,80,0.09) 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 78%, rgba(46,125,50,0.07) 0%, transparent 50%);
+  background-attachment: fixed;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
 }
 
-/* Product Image Card */
-.image-card {
-  border-radius: 15px;
-  overflow: hidden;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease;
+/* ── Page Wrapper ── */
+.pd-wrapper {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 32px 24px 80px;
 }
 
-
-.product-image {
-  width: 100%;
-  height: 350px;
-  object-fit: cover;
-  border-radius: 15px;
+/* ── Loading ── */
+.pd-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  gap: 16px;
+  color: #4a6a4a;
+  font-size: 1rem;
+  font-weight: 600;
 }
 
-/* Info Card */
-.info-card {
-  border-radius: 15px;
-  background-color: #f9fff9;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+.pd-spinner {
+  width: 42px; height: 42px;
+  border: 3.5px solid rgba(76,175,80,0.2);
+  border-top-color: #4caf50;
+  border-radius: 50%;
+  animation: pd-spin 0.75s linear infinite;
 }
 
+@keyframes pd-spin { to { transform: rotate(360deg); } }
 
-
-/* Product Text */
-.product-name {
-  color: #2e7d32;
-  text-transform: uppercase;
-  font-weight: 700;
-}
-
-.product-description {
-  color: #555;
-  margin: 10px 0;
-  overflow: visible;
-  text-overflow: unset;
-  display: block;
-}
-
-.product-price {
-  color: black;
-  font-weight: bold;
-  margin-bottom: 15px;
-}
-
-/* Farmer Info Card */
-.farmer-info {
-  background-color: #aaf3a7;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease;
-  margin-top: 20px;
-  height: 150px;
-}
-
-
-/* Button */
-.btn-success {
-background-color: #ffeb3b;
-  color: #2e7d32;
-  font-weight: bold;
-  padding: 12px 25px;
-  border-radius: 30px;
-  border: none;
-  transition: all 0.3s ease;
-}
-
-.btn-success:hover {
-   background-color: #fdd835;
-   color: #2e7d32;
-  transform: translateY(-3px);
-}
-
-/* Centered text */
-.center-text {
+/* ── State messages ── */
+.pd-state-msg {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 40vh;
+  gap: 12px;
   text-align: center;
+  padding: 40px 24px;
+}
+
+.pd-state-msg span { font-size: 3rem; line-height: 1; }
+
+.pd-state-msg p {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #6a8a6a;
+}
+
+/* ── Breadcrumb ── */
+.pd-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.pd-bc-link {
+  color: #4caf50;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.pd-bc-link:hover { color: #1b5e20; }
+
+.pd-bc-sep { color: #b0c8b0; font-size: 0.9rem; }
+
+.pd-bc-current {
+  color: #4a6a4a;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+/* ── Main layout ── */
+.pd-main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-bottom: 64px;
+  align-items: start;
+}
+
+/* ============================================
+   LEFT — IMAGE COLUMN
+   ============================================ */
+.pd-image-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Image card */
+.pd-image-wrap {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+  box-shadow:
+    0 20px 56px rgba(46,125,50,0.18),
+    0 4px 16px rgba(0,0,0,0.08);
+  aspect-ratio: 4 / 3;
+}
+
+.pd-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+.pd-image-wrap:hover .pd-image {
+  transform: scale(1.06);
+}
+
+/* Image fallback */
+.pd-image-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 5rem;
+  min-height: 320px;
+}
+
+/* Price badge on image */
+.pd-image-price-badge {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: linear-gradient(135deg, #ffe033, #ffa000);
+  color: #1a3300;
+  font-size: 1.05rem;
+  font-weight: 900;
+  padding: 7px 16px;
+  border-radius: 50px;
+  letter-spacing: 0.2px;
+  box-shadow:
+    0 4px 16px rgba(255,160,0,0.55),
+    inset 0 1px 0 rgba(255,255,255,0.4);
+  z-index: 2;
+}
+
+/* Quick stats bar */
+.pd-quick-stats {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255,255,255,0.9);
+  backdrop-filter: blur(10px);
+  border: 1.5px solid rgba(76,175,80,0.15);
+  border-radius: 18px;
+  padding: 16px 22px;
+  box-shadow: 0 4px 16px rgba(46,125,50,0.08);
+}
+
+.pd-stat {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pd-stat-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.pd-stat-val {
+  font-size: 1rem;
+  font-weight: 900;
+  color: #1b5e20;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.pd-stat-lbl {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #8aaa8a;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.pd-stat-divider {
+  width: 1px;
+  height: 36px;
+  background: rgba(76,175,80,0.15);
+  flex-shrink: 0;
+}
+
+/* ============================================
+   RIGHT — INFO COLUMN
+   ============================================ */
+.pd-info-col {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(14px);
+  border-radius: 24px;
+  border: 1.5px solid rgba(76,175,80,0.16);
+  padding: 32px 30px;
+  box-shadow:
+    0 8px 32px rgba(46,125,50,0.09),
+    inset 0 1px 0 rgba(255,255,255,0.95);
+}
+
+/* Tag pill */
+.pd-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+  border: 1px solid rgba(76,175,80,0.25);
+  color: #2e7d32;
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 5px 13px;
+  border-radius: 50px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  width: fit-content;
+}
+
+/* Product name */
+.pd-name {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 900;
+  color: #1b5e20;
+  letter-spacing: -0.5px;
+  line-height: 1.15;
+  margin: 0;
+}
+
+/* Price row */
+.pd-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.pd-price {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #1b5e20;
+  letter-spacing: -1px;
+  line-height: 1;
+}
+
+.pd-price-unit {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #8aaa8a;
+}
+
+/* Description section */
+.pd-desc-wrap {
+  background: rgba(232,245,233,0.45);
+  border-radius: 14px;
+  padding: 16px 18px;
+  border: 1px solid rgba(76,175,80,0.12);
+}
+
+.pd-section-title {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #4a8a4a;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin: 0 0 8px;
+}
+
+.pd-desc {
+  font-size: 0.93rem;
+  color: #4a6a4a;
+  line-height: 1.72;
+  margin: 0;
+}
+
+/* ── Farmer card ── */
+.pd-farmer-card {
+  background: linear-gradient(135deg, #f1fbf1, #e8f5e9);
+  border: 1.5px solid rgba(76,175,80,0.22);
+  border-radius: 18px;
+  padding: 18px 20px;
+  box-shadow: 0 3px 12px rgba(46,125,50,0.1);
+}
+
+.pd-farmer-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(76,175,80,0.14);
+}
+
+.pd-farmer-avatar {
+  width: 46px; height: 46px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #4caf50, #2e7d32);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 1.2rem;
-  color: #555;
-  margin-top: 30px;
+  font-weight: 900;
+  color: #fff;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(46,125,50,0.3);
+}
+
+.pd-farmer-name {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #1b5e20;
+  margin: 0 0 3px;
+}
+
+.pd-farmer-role {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #6aaa6a;
+  margin: 0;
+}
+
+.pd-farmer-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pd-farmer-detail {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 0.87rem;
+  font-weight: 500;
+  color: #3a6a3a;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.pd-farmer-detail:hover { color: #1b5e20; }
+
+.pd-farmer-na {
+  font-size: 0.88rem;
+  color: #8aaa8a;
+  font-weight: 600;
+  padding: 12px 16px;
+  background: rgba(0,0,0,0.03);
+  border-radius: 10px;
+}
+
+/* ── Order button ── */
+.pd-order-btn {
+  width: 100%;
+  padding: 15px;
+  font-size: 1.05rem;
+  font-weight: 900;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.4px;
+  color: #1a3300;
+  background: linear-gradient(135deg, #ffe033, #ffa000);
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 6px 24px rgba(255,160,0,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.4);
+  transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+/* Shimmer */
+.pd-order-btn::before {
+  content: "";
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+  transition: left 0.5s ease;
+}
+
+.pd-order-btn:hover::before { left: 100%; }
+
+.pd-order-btn:hover {
+  background: linear-gradient(135deg, #ffee58, #ffb300);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 14px 36px rgba(255,160,0,0.6);
+}
+
+.pd-order-btn:active {
+  transform: translateY(0);
+  transition-duration: 0.1s;
+}
+
+/* ── Back button ── */
+.pd-back-btn {
+  width: 100%;
+  padding: 11px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  color: #4a7a4a;
+  background: transparent;
+  border: 1.5px solid rgba(76,175,80,0.25);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  letter-spacing: 0.2px;
+}
+
+.pd-back-btn:hover {
+  background: rgba(76,175,80,0.07);
+  border-color: rgba(76,175,80,0.45);
+  color: #1b5e20;
+}
+
+/* ============================================
+   RELATED PRODUCTS
+   ============================================ */
+.pd-related {
+  border-top: 2px solid rgba(76,175,80,0.12);
+  padding-top: 48px;
+}
+
+.pd-related-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.pd-related-header h3 {
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  font-weight: 900;
+  color: #1b5e20;
+  letter-spacing: -0.4px;
+  margin: 0 0 6px;
+  position: relative;
+  display: inline-block;
+}
+
+/* Animated underline bar */
+.pd-related-header h3::after {
+  content: "";
+  display: block;
+  width: 52px; height: 5px;
+  background: linear-gradient(90deg, #4caf50, #ffeb3b, #4caf50);
+  background-size: 200%;
+  border-radius: 10px;
+  margin: 8px auto 0;
+  animation: barShimmer 3s linear infinite;
+}
+
+@keyframes barShimmer {
+  0%   { background-position: 100%; }
+  100% { background-position: -100%; }
+}
+
+.pd-related-header p {
+  font-size: 0.9rem;
+  color: #7a9a7a;
+  margin: 0;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 900px) {
+  .pd-main {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .pd-wrapper {
+    padding: 24px 18px 60px;
+  }
+
+  .pd-image-wrap {
+    aspect-ratio: 16 / 9;
+  }
+
+  .pd-info-col {
+    padding: 24px 22px;
+  }
+}
+
+@media (max-width: 560px) {
+  .pd-wrapper { padding: 18px 14px 50px; }
+
+  .pd-quick-stats {
+    padding: 12px 14px;
+    gap: 8px;
+  }
+
+  .pd-stat-icon { font-size: 1.1rem; }
+  .pd-stat-val  { font-size: 0.88rem; }
+  .pd-stat-lbl  { font-size: 0.66rem; }
+
+  .pd-price { font-size: 1.6rem; }
+  .pd-name  { font-size: 1.4rem; }
+
+  .pd-info-col { padding: 20px 18px; gap: 14px; }
+
+  .pd-farmer-avatar { width: 40px; height: 40px; }
+
+  .pd-order-btn { font-size: 0.96rem; padding: 13px; }
 }
