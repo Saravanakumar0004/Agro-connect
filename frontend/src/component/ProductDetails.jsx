@@ -11,10 +11,9 @@ export default function ProductDetails() {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [imgError, setImgError] = useState(false);
 
-  // ✅ Use env variable or fallback
   const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
-  console.log("API URL:", API_URL);
 
   useEffect(() => {
     async function fetchProduct() {
@@ -22,8 +21,7 @@ export default function ProductDetails() {
         const res = await axios.get(`${API_URL}/products/${id}`);
         setProduct(res.data);
       } catch (err) {
-        console.error("❌ Error fetching product details:", err);
-        setError("Failed to load product details");
+        setError("Failed to load product details.");
       } finally {
         setLoading(false);
       }
@@ -31,64 +29,187 @@ export default function ProductDetails() {
     fetchProduct();
   }, [id, API_URL]);
 
-  if (loading) return <p className="center-text">Loading product details...</p>;
-  if (error) return <p className="center-text text-danger">{error}</p>;
-  if (!product) return <p className="center-text">Product not found</p>;
+  // ── Loading ──
+  if (loading) return (
+    <>
+      <Navbar />
+      <div className="pd-loading">
+        <div className="pd-spinner"></div>
+        <p>Loading product details…</p>
+      </div>
+    </>
+  );
+
+  // ── Error ──
+  if (error) return (
+    <>
+      <Navbar />
+      <div className="pd-state-msg">
+        <span>⚠️</span>
+        <p>{error}</p>
+      </div>
+    </>
+  );
+
+  // ── Not found ──
+  if (!product) return (
+    <>
+      <Navbar />
+      <div className="pd-state-msg">
+        <span>🔍</span>
+        <p>Product not found.</p>
+      </div>
+    </>
+  );
 
   const { farmerId } = product;
 
   return (
     <>
       <Navbar />
-      <div className="container mt-4 product-details-container">
-        <div className="row">
-          {/* Product Image */}
-          <div className="col-md-6">
-            <div className="image-card mb-3">
-              <img
-                src={`${API_URL}/products/${id}/image`}
-                alt={product.name}
-                className="product-image"
-              />
+
+      <div className="pd-wrapper">
+
+        {/* ── Breadcrumb ── */}
+        <div className="pd-breadcrumb">
+          <span onClick={() => navigate('/')} className="pd-bc-link">Home</span>
+          <span className="pd-bc-sep">›</span>
+          <span onClick={() => navigate('/shop')} className="pd-bc-link">Shop</span>
+          <span className="pd-bc-sep">›</span>
+          <span className="pd-bc-current">{product.name}</span>
+        </div>
+
+        {/* ── Main detail card ── */}
+        <div className="pd-main">
+
+          {/* Left — Image */}
+          <div className="pd-image-col">
+            <div className="pd-image-wrap">
+              {imgError ? (
+                <div className="pd-image-fallback">🌾</div>
+              ) : (
+                <img
+                  src={`${API_URL}/products/${id}/image`}
+                  alt={product.name}
+                  className="pd-image"
+                  onError={() => setImgError(true)}
+                />
+              )}
+              {/* Price overlay */}
+              <div className="pd-image-price-badge">₹{product.price}</div>
+            </div>
+
+            {/* Quick stats below image */}
+            <div className="pd-quick-stats">
+              <div className="pd-stat">
+                <span className="pd-stat-icon">📦</span>
+                <div>
+                  <p className="pd-stat-val">{product.quantity || 'N/A'}</p>
+                  <p className="pd-stat-lbl">In Stock</p>
+                </div>
+              </div>
+              <div className="pd-stat-divider"></div>
+              <div className="pd-stat">
+                <span className="pd-stat-icon">💰</span>
+                <div>
+                  <p className="pd-stat-val">₹{product.price}</p>
+                  <p className="pd-stat-lbl">Per Unit</p>
+                </div>
+              </div>
+              <div className="pd-stat-divider"></div>
+              <div className="pd-stat">
+                <span className="pd-stat-icon">🌿</span>
+                <div>
+                  <p className="pd-stat-val">Fresh</p>
+                  <p className="pd-stat-lbl">Quality</p>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Product Info */}
-          <div className="col-md-6">
-            <div className="info-card p-4">
-              <h2 className="product-name">{product.name}</h2>
-              <p className="product-description">{product.description}</p>
-              <h4 className="product-price">₹{product.price}</h4>
+          {/* Right — Info */}
+          <div className="pd-info-col">
 
-              {/* Farmer Info */}
-              {farmerId ? (
-                <div className="farmer-info card p-3 mt-4 shadow-sm">
-                  <p><strong>Farmer Name:</strong> {farmerId.name}</p>
-                  <p>
-                    <strong>Contact:</strong>{" "}
-                    {farmerId.phone ? (
-                      <a href={`tel:${farmerId.phone}`}>{farmerId.phone}</a>
-                    ) : "N/A"}
-                  </p>
-                  <p><strong>Location:</strong> {farmerId.location}</p>
-                </div>
-              ) : (
-                <p><strong>Farmer:</strong> N/A</p>
-              )}
+            {/* Category tag */}
+            <div className="pd-tag">🛒 Farm Product</div>
 
-              <button
-                className="btn btn-success mt-4"
-                onClick={() => navigate(`/order/${product._id}`)}
-              >
-                Order Now
-              </button>
+            {/* Name */}
+            <h1 className="pd-name">{product.name}</h1>
+
+            {/* Price */}
+            <div className="pd-price-row">
+              <span className="pd-price">₹{product.price}</span>
+              <span className="pd-price-unit">per unit</span>
             </div>
+
+            {/* Description */}
+            <div className="pd-desc-wrap">
+              <h4 className="pd-section-title">About this product</h4>
+              <p className="pd-desc">{product.description}</p>
+            </div>
+
+            {/* Farmer info */}
+            {farmerId ? (
+              <div className="pd-farmer-card">
+                <div className="pd-farmer-header">
+                  <div className="pd-farmer-avatar">
+                    {farmerId.name?.charAt(0).toUpperCase() || 'F'}
+                  </div>
+                  <div>
+                    <p className="pd-farmer-name">{farmerId.name}</p>
+                    <p className="pd-farmer-role">👨‍🌾 Verified Farmer</p>
+                  </div>
+                </div>
+                <div className="pd-farmer-details">
+                  {farmerId.phone && (
+                    <a href={`tel:${farmerId.phone}`} className="pd-farmer-detail">
+                      <span>📞</span>
+                      <span>{farmerId.phone}</span>
+                    </a>
+                  )}
+                  {farmerId.location && (
+                    <div className="pd-farmer-detail">
+                      <span>📍</span>
+                      <span>{farmerId.location}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <div className="pd-farmer-na">
+                <span>👤</span> Farmer info not available
+              </div>
+            )}
+
+            {/* Order button */}
+            <button
+              className="pd-order-btn"
+              onClick={() => navigate(`/order/${product._id}`)}
+            >
+              <span>🛒</span>
+              Order Now
+            </button>
+
+            {/* Back link */}
+            <button
+              className="pd-back-btn"
+              onClick={() => navigate(-1)}
+            >
+              ← Back to Shop
+            </button>
+
           </div>
         </div>
 
-        {/* Related Products */}
-        <h3 className="mt-5 mb-3">Other Products</h3>
-        <ProductList />
+        {/* ── Related products ── */}
+        <div className="pd-related">
+          <div className="pd-related-header">
+            <h3>More Products</h3>
+            <p>Fresh picks from verified farmers</p>
+          </div>
+          <ProductList />
+        </div>
+
       </div>
     </>
   );
