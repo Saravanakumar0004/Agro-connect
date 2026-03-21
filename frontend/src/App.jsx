@@ -120,14 +120,24 @@ function App() {
           </div>
         </section>
 
-        {/* ── Featured Products ── */}
+        {/* ── Featured Products — 4 only ── */}
         <section className="featured-products my-5">
           <div className="section-label">Catalogue</div>
           <h2 className="text-center">Featured Products</h2>
           <p className="section-subtitle text-center">
             Fresh picks from verified farmers, updated daily.
           </p>
-          <ProductList />
+
+          {/* limit=4 hides toolbar and shows only 4 cards */}
+          <ProductList limit={4} />
+
+          {/* View All CTA */}
+          <div className="fp-view-all">
+            <p className="fp-view-all-hint">✨ Showing 4 featured picks · Many more await</p>
+            <Link to="/shop" className="fp-view-all-btn">
+              🛒 Browse All Products →
+            </Link>
+          </div>
         </section>
 
         {/* ── CTA / Welcome Back ── */}
