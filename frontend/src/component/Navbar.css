@@ -550,3 +550,9 @@
     font-size: 0.82rem;
   }
 }
+/* ── Hide hamburger on desktop ── */
+@media (min-width: 992px) {
+  .custom-toggler {
+    display: none !important;
+  }
+}
