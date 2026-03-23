@@ -3,6 +3,7 @@ import Navbar from './Navbar';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import './Login.css';
+import Footer from './Footer';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -178,8 +179,8 @@ export default function Login() {
 
           </div>
         </div>
-
       </div>
+      <Footer />
     </>
   );
 }
