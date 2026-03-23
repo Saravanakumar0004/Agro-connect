@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Navbar from "./Navbar";
 import './OrderPage.css';
+import Footer from "./Footer";
 
 export default function OrderPage() {
   const { id } = useParams();
@@ -303,6 +304,7 @@ export default function OrderPage() {
 
         </div>
       </div>
+      <Footer />
     </>
   );
 }
