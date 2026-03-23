@@ -9,12 +9,10 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  // Close mobile menu on route change
   useEffect(() => {
     setIsOpen(false);
   }, [location.pathname]);
 
-  // Add scrolled class for shadow depth
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
     window.addEventListener("scroll", onScroll);
@@ -121,6 +119,17 @@ export default function Navbar() {
                     My Orders
                   </Link>
                 </li>
+
+                {/* ── AI Advisor — Farmer ── */}
+                <li className="nav-item">
+                  <Link
+                    className={`nav-link nav-link--ai ${isActive('/ai-advisor') ? 'nav-link--active' : ''}`}
+                    to="/ai-advisor"
+                  >
+                    <span className="nav-ai-icon">🤖</span>
+                    AI Advisor
+                  </Link>
+                </li>
               </>
             )}
 
@@ -141,6 +150,17 @@ export default function Navbar() {
                     to="/my-orders"
                   >
                     My Orders
+                  </Link>
+                </li>
+
+                {/* ── AI Advisor — Customer ── */}
+                <li className="nav-item">
+                  <Link
+                    className={`nav-link nav-link--ai ${isActive('/ai-advisor') ? 'nav-link--active' : ''}`}
+                    to="/ai-advisor"
+                  >
+                    <span className="nav-ai-icon">🤖</span>
+                    AI Advisor
                   </Link>
                 </li>
               </>
