@@ -3,6 +3,7 @@ import './App.css';
 import Navbar from './component/Navbar';
 import ProductList from './component/ProductList';
 import { useEffect, useState } from 'react';
+import Footer from './component/Footer';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -181,25 +182,7 @@ function App() {
       </div>
 
       {/* ── Footer ── */}
-      <footer className="site-footer">
-        <div className="container">
-          <div className="footer-inner">
-            <div className="footer-brand">
-              🌿 <strong>AgroLink</strong>
-              <p>Connecting farms to families.</p>
-            </div>
-            <div className="footer-links">
-              <Link to="/">Home</Link>
-              <Link to="/shop">Shop</Link>
-              <Link to="/login">Login</Link>
-              <Link to="/register">Register</Link>
-            </div>
-          </div>
-          <div className="footer-bottom">
-            © {new Date().getFullYear()} AgroLink. All rights reserved.
-          </div>
-        </div>
-      </footer>
+   <Footer />
     </>
   );
 }
