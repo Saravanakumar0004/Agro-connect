@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "./Navbar";
 import './FarmerOrders.css';
+import Footer from "./Footer";
 
 export default function FarmerOrders() {
   const [orders, setOrders] = useState([]);
@@ -273,6 +274,7 @@ export default function FarmerOrders() {
         )}
 
       </div>
+      <Footer />
     </>
   );
 }
