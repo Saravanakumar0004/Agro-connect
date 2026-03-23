@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import Navbar from './Navbar';
 import './Register.css';
+import Footer from './Footer';
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -323,6 +324,7 @@ export default function Register() {
         </div>
 
       </div>
+      <Footer />
     </>
   );
 }
