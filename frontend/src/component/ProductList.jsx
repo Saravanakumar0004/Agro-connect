@@ -174,7 +174,7 @@ export default function ProductList({ limit }) {
           ))}
         </div>
       )}
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }
