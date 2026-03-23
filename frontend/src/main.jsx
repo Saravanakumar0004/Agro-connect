@@ -11,6 +11,7 @@ import ProductDetails from './component/ProductDetails.jsx';
 import CustomerOrders from './component/CustomerOrders.jsx';
 import FarmerOrders from './component/FarmerOrders.jsx';
 import Shop from './component/Shop.jsx';
+import Footer from './component/Footer.jsx';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -46,6 +47,9 @@ const router = createBrowserRouter([
   {
     path: '/shop',
     element: <Shop/>
+  },{
+    path: '*',
+    element: <Footer/>
   }
 ]);
 
