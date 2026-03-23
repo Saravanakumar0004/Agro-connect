@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import './ProductList.css';
+import Footer from "./Footer";
 
 export default function ProductList({ limit }) {
   const [products, setProducts] = useState([]);
@@ -173,7 +174,7 @@ export default function ProductList({ limit }) {
           ))}
         </div>
       )}
-
+      <Footer />
     </div>
   );
 }
