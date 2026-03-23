@@ -12,6 +12,7 @@ import CustomerOrders from './component/CustomerOrders.jsx';
 import FarmerOrders from './component/FarmerOrders.jsx';
 import Shop from './component/Shop.jsx';
 import Footer from './component/Footer.jsx';
+import AIAdvisor from './component/AIQualityAdvisor.jsx';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
   },{
     path: '*',
     element: <Footer/>
+  },
+  {
+    path:"/ai-advisor",
+    element:<AIAdvisor />
   }
 ]);
 
