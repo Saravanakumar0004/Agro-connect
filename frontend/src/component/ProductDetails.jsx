@@ -4,6 +4,7 @@ import ProductList from "./ProductList";
 import axios from "axios";
 import Navbar from "./Navbar";
 import './ProductDetails.css';
+import Footer from "./Footer";
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -209,6 +210,7 @@ export default function ProductDetails() {
           </div>
           <ProductList />
         </div>
+        <Footer />
 
       </div>
     </>
