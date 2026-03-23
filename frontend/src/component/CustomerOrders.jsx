@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "./Navbar";
 import './CustomerOrders.css';
+import Footer from "./Footer";
 
 export default function CustomerOrders() {
   const [orders, setOrders] = useState([]);
@@ -223,6 +224,7 @@ export default function CustomerOrders() {
         )}
 
       </div>
+      <Footer />
     </>
   );
 }
