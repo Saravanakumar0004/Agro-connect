@@ -550,9 +550,59 @@
     font-size: 0.82rem;
   }
 }
+
 /* ── Hide hamburger on desktop ── */
 @media (min-width: 992px) {
   .custom-toggler {
     display: none !important;
+  }
+}
+
+/* ── AI Advisor nav link ── */
+.custom-navbar .nav-link--ai {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255,235,59,0.1) !important;
+  border: 1px solid rgba(255,235,59,0.28) !important;
+  color: #ffe033 !important;
+  border-radius: 50px !important;
+  padding: 0.42rem 1rem !important;
+  font-weight: 700 !important;
+  font-size: 0.84rem !important;
+  transition: all 0.26s cubic-bezier(0.34,1.56,0.64,1) !important;
+  margin-left: 2px;
+}
+
+.custom-navbar .nav-link--ai:hover {
+  background: rgba(255,235,59,0.2) !important;
+  border-color: rgba(255,235,59,0.5) !important;
+  color: #fff !important;
+  transform: translateY(-2px) scale(1.04) !important;
+  box-shadow: 0 6px 18px rgba(255,235,59,0.2) !important;
+}
+
+.custom-navbar .nav-link--ai.nav-link--active {
+  background: rgba(255,235,59,0.22) !important;
+  border-color: rgba(255,235,59,0.5) !important;
+  color: #ffe033 !important;
+}
+
+/* Remove underline from AI link */
+.custom-navbar .nav-link--ai::after { display: none !important; }
+
+.nav-ai-icon {
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+/* Mobile — AI Advisor link */
+@media (max-width: 991px) {
+  .custom-navbar .nav-link--ai {
+    border-radius: 12px !important;
+    margin: 3px 0 !important;
+    padding: 0.65rem 1rem !important;
+    justify-content: flex-start;
+    width: 100%;
   }
 }
