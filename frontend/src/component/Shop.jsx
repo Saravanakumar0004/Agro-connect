@@ -1,6 +1,7 @@
 import React from 'react';
 import Navbar from './Navbar';
 import ProductList from './ProductList';
+import Footer from './Footer';
 
 function Shop() {
   return (
@@ -195,8 +196,8 @@ function Shop() {
         <div>
           <ProductList />
         </div>
-
       </div>
+      <Footer />
     </>
   );
 }
