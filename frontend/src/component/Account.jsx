@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Navbar from './Navbar';
 import './Account.css';
+import Footer from './Footer';
 
 export default function Account() {
   const navigate = useNavigate();
@@ -246,6 +247,7 @@ export default function Account() {
         </div>
 
       </div>
+      <Footer />
     </>
   );
 }
