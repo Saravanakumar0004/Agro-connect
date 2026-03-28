@@ -5,33 +5,54 @@ import Navbar from "./Navbar";
 import './OrderPage.css';
 import Footer from "./Footer";
 
+const PAYMENT_METHODS = {
+  GPAY: 'gpay',
+  COD:  'cod',
+};
+
+function buildUpiLink({ phone, amount, name, note }) {
+  const upiId   = `${phone}@gpay`;
+  const params  = new URLSearchParams({
+    pa: upiId,
+    pn: name || 'Farmer',
+    am: amount.toFixed(2),
+    cu: 'INR',
+    tn: note || 'Farm product order',
+  });
+  return `upi://pay?${params.toString()}`;
+}
+
 export default function OrderPage() {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const [product, setProduct] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { id }     = useParams();
+  const navigate   = useNavigate();
+
+  const [product,    setProduct]    = useState(null);
+  const [loading,    setLoading]    = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState('');
-  const [imgError, setImgError] = useState(false);
+  const [success,    setSuccess]    = useState(false);
+  const [error,      setError]      = useState('');
+  const [imgError,   setImgError]   = useState(false);
+  const [payment,    setPayment]    = useState(PAYMENT_METHODS.GPAY);
+  const [gpayDone,   setGpayDone]   = useState(false); // user tapped "Open GPay"
+
   const [formData, setFormData] = useState({
     quantity: 1,
-    address: "",
-    phone: ""
+    address:  '',
+    phone:    '',
   });
 
-  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
+  /* ── Fetch product ── */
   useEffect(() => {
     async function fetchProduct() {
       try {
         const res = await axios.get(`${API_URL}/products/${id}`);
         setProduct(res.data);
-        // Pre-fill phone from user profile
-        const user = JSON.parse(localStorage.getItem("user"));
+        const user = JSON.parse(localStorage.getItem('user'));
         if (user?.phone) setFormData(p => ({ ...p, phone: user.phone }));
-      } catch (err) {
-        setError("Failed to load product details.");
+      } catch {
+        setError('Failed to load product details.');
       } finally {
         setLoading(false);
       }
@@ -39,55 +60,74 @@ export default function OrderPage() {
     fetchProduct();
   }, [id, API_URL]);
 
+  /* ── Derived values ── */
+  const totalAmount = product
+    ? parseFloat((product.price * Number(formData.quantity)).toFixed(2))
+    : 0;
+
+  const farmerId    = product?.farmerId;
+  const farmerPhone = farmerId?.phone || '';
+  const farmerName  = farmerId?.name  || 'Farmer';
+  const upiLink     = farmerPhone
+    ? buildUpiLink({ phone: farmerPhone, amount: totalAmount, name: farmerName, note: `Order: ${product?.name}` })
+    : null;
+
+  /* ── Submit ── */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    setSubmitting(true);
 
+    // If GPay is selected but user hasn't tapped "Open GPay" yet, nudge them
+    if (payment === PAYMENT_METHODS.GPAY && !gpayDone && upiLink) {
+      setError('Please complete your GPay payment first, then confirm your order.');
+      return;
+    }
+
+    setSubmitting(true);
     try {
-      const user = JSON.parse(localStorage.getItem("user"));
-      if (!user?._id) {
-        navigate("/login");
-        return;
-      }
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (!user?._id) { navigate('/login'); return; }
 
       const orderData = {
-        customerId: user._id,
-        productId: id,
-        quantity: Number(formData.quantity),
-        address: formData.address,
-        phone: formData.phone
+        customerId:    user._id,
+        productId:     id,
+        quantity:      Number(formData.quantity),
+        address:       formData.address,
+        phone:         formData.phone,
+        paymentMethod: payment,
+        paymentStatus: payment === PAYMENT_METHODS.GPAY ? 'paid' : 'pending',
       };
 
       const res = await axios.post(`${API_URL}/orders`, orderData);
-
       if (res.status === 201) {
         setSuccess(true);
-        setTimeout(() => navigate("/my-orders"), 1800);
+        setTimeout(() => navigate('/my-orders'), 1800);
       }
-    } catch (err) {
-      setError("Failed to place order. Please try again.");
+    } catch {
+      setError('Failed to place order. Please try again.');
     } finally {
       setSubmitting(false);
     }
   };
 
-  const totalPrice = product
-    ? (product.price * Number(formData.quantity)).toFixed(2)
-    : 0;
+  const handleOpenGpay = () => {
+    window.location.href = upiLink;
+    // Give the UPI app 1.5 s to open, then mark as done
+    setTimeout(() => setGpayDone(true), 1500);
+  };
 
-  // ── Loading ──
+  /* ── Loading ── */
   if (loading) return (
     <>
       <Navbar />
       <div className="op-loading">
-        <div className="op-spinner"></div>
+        <div className="op-spinner" />
         <p>Loading product…</p>
       </div>
     </>
   );
 
-  // ── Not found ──
+  /* ── Not found ── */
   if (!product) return (
     <>
       <Navbar />
@@ -97,8 +137,6 @@ export default function OrderPage() {
       </div>
     </>
   );
-
-  const farmerId = product.farmerId;
 
   return (
     <>
@@ -117,10 +155,10 @@ export default function OrderPage() {
 
         <div className="op-layout">
 
-          {/* ══ LEFT — Product + Farmer info ══ */}
+          {/* ══ LEFT ══ */}
           <div className="op-left">
 
-            {/* Product preview card */}
+            {/* Product card */}
             <div className="op-product-card">
               <div className="op-product-img-wrap">
                 {imgError ? (
@@ -133,7 +171,7 @@ export default function OrderPage() {
                     onError={() => setImgError(true)}
                   />
                 )}
-                <div className="op-product-img-overlay"></div>
+                <div className="op-product-img-overlay" />
               </div>
 
               <div className="op-product-info">
@@ -149,26 +187,26 @@ export default function OrderPage() {
               </div>
             </div>
 
-            {/* Payment info notice */}
+            {/* Payment notice */}
             <div className="op-notice">
               <div className="op-notice-icon">💰</div>
               <div>
-                <p className="op-notice-title">Direct Payment to Farmer</p>
+                <p className="op-notice-title">Pay Directly to the Farmer</p>
                 <p className="op-notice-text">
-                  After placing your order, contact the farmer directly to confirm and complete payment.
+                  Use GPay for instant UPI transfer to the farmer's number, or choose Cash on Delivery.
                 </p>
               </div>
             </div>
 
-            {/* Farmer info */}
+            {/* Farmer card */}
             {farmerId ? (
               <div className="op-farmer-card">
                 <div className="op-farmer-header">
                   <div className="op-farmer-avatar">
-                    {farmerId.name?.charAt(0).toUpperCase() || 'F'}
+                    {farmerName.charAt(0).toUpperCase()}
                   </div>
                   <div>
-                    <p className="op-farmer-name">{farmerId.name}</p>
+                    <p className="op-farmer-name">{farmerName}</p>
                     <p className="op-farmer-badge">👨‍🌾 Verified Farmer</p>
                   </div>
                 </div>
@@ -179,17 +217,21 @@ export default function OrderPage() {
                       <span>{farmerId.location}</span>
                     </div>
                   )}
-                  {farmerId.phone && (
-                    <a href={`tel:${farmerId.phone}`} className="op-call-btn">
-                      📞 Call {farmerId.phone}
-                    </a>
+                  {farmerPhone && (
+                    <>
+                      <div className="op-farmer-row">
+                        <span>📱</span>
+                        <span>UPI: <strong>{farmerPhone}@gpay</strong></span>
+                      </div>
+                      <a href={`tel:${farmerPhone}`} className="op-call-btn">
+                        📞 Call {farmerPhone}
+                      </a>
+                    </>
                   )}
                 </div>
               </div>
             ) : (
-              <div className="op-farmer-na">
-                👤 Farmer info not available
-              </div>
+              <div className="op-farmer-na">👤 Farmer info not available</div>
             )}
 
           </div>
@@ -210,34 +252,31 @@ export default function OrderPage() {
                 </div>
               )}
               {error && (
-                <div className="op-alert op-alert--error">
-                  ❌ {error}
-                </div>
+                <div className="op-alert op-alert--error">❌ {error}</div>
               )}
 
               <form onSubmit={handleSubmit} className="op-form">
 
                 {/* Quantity */}
                 <div className="op-field">
-                  <label className="op-label">
-                    <span>📦</span> Quantity
-                  </label>
+                  <label className="op-label"><span>📦</span> Quantity</label>
                   <input
                     type="number"
                     className="op-input"
                     min="1"
                     placeholder="1"
                     value={formData.quantity}
-                    onChange={e => setFormData({ ...formData, quantity: e.target.value })}
+                    onChange={e => {
+                      setFormData({ ...formData, quantity: e.target.value });
+                      setGpayDone(false); // amount changed → must re-pay
+                    }}
                     required
                   />
                 </div>
 
                 {/* Phone */}
                 <div className="op-field">
-                  <label className="op-label">
-                    <span>📞</span> Phone Number
-                  </label>
+                  <label className="op-label"><span>📞</span> Phone Number</label>
                   <input
                     type="text"
                     className="op-input"
@@ -250,9 +289,7 @@ export default function OrderPage() {
 
                 {/* Address */}
                 <div className="op-field">
-                  <label className="op-label">
-                    <span>📍</span> Delivery Address
-                  </label>
+                  <label className="op-label"><span>📍</span> Delivery Address</label>
                   <textarea
                     className="op-input op-textarea"
                     placeholder="Enter your full delivery address…"
@@ -263,7 +300,7 @@ export default function OrderPage() {
                   />
                 </div>
 
-                {/* Order summary */}
+                {/* ── Order Summary ── */}
                 <div className="op-summary">
                   <div className="op-summary-row">
                     <span>Unit Price</span>
@@ -273,24 +310,117 @@ export default function OrderPage() {
                     <span>Quantity</span>
                     <span>× {formData.quantity}</span>
                   </div>
-                  <div className="op-summary-divider"></div>
+                  <div className="op-summary-divider" />
                   <div className="op-summary-row op-summary-total">
                     <span>Total</span>
-                    <span>₹{totalPrice}</span>
+                    <span>₹{totalAmount.toFixed(2)}</span>
                   </div>
                 </div>
 
-                {/* Submit */}
+                {/* ══ Payment Method ══ */}
+                <div className="op-field">
+                  <label className="op-label"><span>💳</span> Payment Method</label>
+
+                  <div className="op-pay-options">
+
+                    {/* GPay option */}
+                    <div
+                      className={`op-pay-option ${payment === PAYMENT_METHODS.GPAY ? 'op-pay-option--active' : ''}`}
+                      onClick={() => { setPayment(PAYMENT_METHODS.GPAY); setGpayDone(false); }}
+                    >
+                      <div className="op-pay-radio">
+                        <div className="op-pay-radio-dot" />
+                      </div>
+                      <div className="op-pay-icon op-pay-icon--gpay">💸</div>
+                      <div className="op-pay-text">
+                        <span className="op-pay-title">Google Pay (UPI)</span>
+                        <span className="op-pay-sub">Instant transfer to farmer</span>
+                      </div>
+                      <span className="op-pay-badge op-pay-badge--gpay">Instant</span>
+                    </div>
+
+                    {/* COD option */}
+                    <div
+                      className={`op-pay-option ${payment === PAYMENT_METHODS.COD ? 'op-pay-option--active' : ''}`}
+                      onClick={() => setPayment(PAYMENT_METHODS.COD)}
+                    >
+                      <div className="op-pay-radio">
+                        <div className="op-pay-radio-dot" />
+                      </div>
+                      <div className="op-pay-icon op-pay-icon--cod">💵</div>
+                      <div className="op-pay-text">
+                        <span className="op-pay-title">Cash on Delivery</span>
+                        <span className="op-pay-sub">Pay when you receive</span>
+                      </div>
+                      <span className="op-pay-badge op-pay-badge--cod">COD</span>
+                    </div>
+
+                  </div>
+
+                  {/* ── GPay action block ── */}
+                  {payment === PAYMENT_METHODS.GPAY && (
+                    <div className={`op-gpay-block ${gpayDone ? 'op-gpay-block--done' : ''}`}>
+                      {farmerPhone ? (
+                        <>
+                          <div className="op-gpay-upi-row">
+                            <span className="op-gpay-upi-label">Farmer UPI</span>
+                            <span className="op-gpay-upi-id">{farmerPhone}@gpay</span>
+                          </div>
+
+                          {gpayDone ? (
+                            <div className="op-gpay-confirmed">
+                              ✅ Payment initiated — click &ldquo;Place Order&rdquo; to confirm
+                            </div>
+                          ) : (
+                            <button
+                              type="button"
+                              className="op-gpay-btn"
+                              onClick={handleOpenGpay}
+                            >
+                              <span className="op-gpay-logo">G</span>
+                              Open Google Pay &mdash; ₹{totalAmount.toFixed(2)}
+                            </button>
+                          )}
+
+                          {!gpayDone && (
+                            <>
+                              <p className="op-gpay-note">
+                                Opens the GPay app · Complete payment · Return here to confirm your order
+                              </p>
+                              <button
+                                type="button"
+                                className="op-gpay-manual-btn"
+                                onClick={() => setGpayDone(true)}
+                              >
+                                I've already paid via GPay
+                              </button>
+                            </>
+                          )}
+                        </>
+                      ) : (
+                        <p className="op-gpay-no-phone">
+                          ⚠️ Farmer's phone number is not available. Please choose Cash on Delivery or contact the farmer directly.
+                        </p>
+                      )}
+                    </div>
+                  )}
+
+                  {/* COD info */}
+                  {payment === PAYMENT_METHODS.COD && (
+                    <div className="op-cod-info">
+                      💵 You will pay <strong>₹{totalAmount.toFixed(2)}</strong> in cash when your order is delivered.
+                    </div>
+                  )}
+                </div>
+
+                {/* ── Submit ── */}
                 <button
                   type="submit"
                   className={`op-submit-btn ${submitting ? 'op-submit-btn--loading' : ''}`}
                   disabled={submitting || success}
                 >
                   {submitting ? (
-                    <>
-                      <span className="op-spinner-sm"></span>
-                      Placing Order…
-                    </>
+                    <><span className="op-spinner-sm" /> Placing Order…</>
                   ) : success ? (
                     '✅ Order Placed!'
                   ) : (
@@ -304,6 +434,7 @@ export default function OrderPage() {
 
         </div>
       </div>
+
       <Footer />
     </>
   );
