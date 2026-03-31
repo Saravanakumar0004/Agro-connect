@@ -43,26 +43,41 @@ function isMobile() {
 }
 
 /**
- * launchUpi — fires upi:// WITHOUT leaving the page.
+ * launchUpi — opens GPay/any UPI app WITHOUT leaving the page.
  *
- * Method: create an <a href="upi://..."> with target="_blank",
- * programmatically click it, then immediately remove it.
- * The browser/OS intercepts the custom scheme and hands it to
- * the registered UPI app (GPay, PhonePe, etc.) while the
- * current tab stays exactly where it is.
+ * Problems with naive window.location.href = "upi://...":
+ *   1. Chrome on Android navigates the tab → flash + snap-back
+ *   2. Some browsers block programmatic clicks on hidden anchors
+ *   3. Samsung Internet needs a slight delay before the scheme fires
+ *
+ * Solution:
+ *   - Use a visible, in-flow anchor (opacity:0, pointer-events:none)
+ *     so the browser doesn't treat it as a popup and block it
+ *   - Dispatch a real MouseEvent (not just .click()) for max compat
+ *   - target="_blank" so the OS intercepts the scheme in a new
+ *     context; the current tab never navigates
  */
 function launchUpi(upiUrl) {
   const a = document.createElement('a');
-  a.href   = upiUrl;
-  a.rel    = 'noopener noreferrer';
-  // target="_blank" is essential — it prevents the tab from
-  // navigating away when the scheme is not handled by the browser
-  a.target = '_blank';
-  a.style.display = 'none';
+  a.href             = upiUrl;
+  a.target           = '_blank';
+  a.rel              = 'noopener noreferrer';
+  // Must be in-flow (not display:none) or some browsers block it
+  a.style.cssText    = 'position:fixed;top:0;left:0;opacity:0;pointer-events:none;z-index:-1;';
   document.body.appendChild(a);
-  a.click();
-  // Clean up after a tick
-  setTimeout(() => document.body.removeChild(a), 500);
+
+  // Dispatch a real trusted-like MouseEvent for Samsung Internet / Firefox
+  try {
+    a.dispatchEvent(new MouseEvent('click', {
+      bubbles: true, cancelable: true, view: window,
+    }));
+  } catch {
+    a.click();
+  }
+
+  setTimeout(() => {
+    if (document.body.contains(a)) document.body.removeChild(a);
+  }, 1000);
 }
 
 export default function OrderPage() {
@@ -76,7 +91,8 @@ export default function OrderPage() {
   const [error,      setError]      = useState('');
   const [imgError,   setImgError]   = useState(false);
   const [payment,    setPayment]    = useState(PAYMENT_METHODS.GPAY);
-  const [gpayDone,   setGpayDone]   = useState(false); // user tapped "Open GPay"
+  const [gpayDone,    setGpayDone]    = useState(false);
+  const [gpayPending, setGpayPending] = useState(false); // waiting for user to return from GPay
 
   const [formData, setFormData] = useState({
     quantity: 1,
@@ -159,16 +175,35 @@ export default function OrderPage() {
     };
 
     if (isMobile()) {
-      // Mobile: fire upi:// via hidden <a target="_blank"> so the OS
-      // hands off to GPay WITHOUT navigating away from this page.
+      // Fire upi:// via in-flow <a target="_blank"> so the OS launches GPay
+      // while this tab stays exactly where it is — no flash, no snap-back.
+      setGpayPending(true);
       launchUpi(buildUpiLink(upiParams));
+
+      // When the user returns from GPay the page becomes visible again.
+      // Use that signal to unlock the "Place Order" button.
+      const onReturn = () => {
+        if (document.visibilityState === 'visible') {
+          setGpayDone(true);
+          setGpayPending(false);
+          document.removeEventListener('visibilitychange', onReturn);
+        }
+      };
+      document.addEventListener('visibilitychange', onReturn);
+
+      // Safety fallback: unlock after 8 s even if visibilitychange never fires
+      setTimeout(() => {
+        setGpayDone(true);
+        setGpayPending(false);
+        document.removeEventListener('visibilitychange', onReturn);
+      }, 8000);
+
     } else {
       // Desktop: open GPay web in a new tab (shows QR to scan).
       window.open(buildGpayWebLink(upiParams), '_blank', 'noopener,noreferrer');
+      // On desktop the user stays on this tab, unlock after 3 s
+      setTimeout(() => setGpayDone(true), 3000);
     }
-
-    // Mark payment as initiated after 2 s so the confirm button unlocks.
-    setTimeout(() => setGpayDone(true), 2000);
   };
 
   /* ── Loading ── */
@@ -323,7 +358,7 @@ export default function OrderPage() {
                     value={formData.quantity}
                     onChange={e => {
                       setFormData({ ...formData, quantity: e.target.value });
-                      setGpayDone(false); // amount changed → must re-pay
+                      setGpayDone(false); setGpayPending(false); // amount changed → must re-pay
                     }}
                     required
                   />
@@ -381,7 +416,7 @@ export default function OrderPage() {
                     {/* GPay option */}
                     <div
                       className={`op-pay-option ${payment === PAYMENT_METHODS.GPAY ? 'op-pay-option--active' : ''}`}
-                      onClick={() => { setPayment(PAYMENT_METHODS.GPAY); setGpayDone(false); }}
+                      onClick={() => { setPayment(PAYMENT_METHODS.GPAY); setGpayDone(false); setGpayPending(false); }}
                     >
                       <div className="op-pay-radio">
                         <div className="op-pay-radio-dot" />
@@ -424,8 +459,25 @@ export default function OrderPage() {
 
                           {gpayDone ? (
                             <div className="op-gpay-confirmed">
-                              ✅ Payment initiated — click &ldquo;Place Order&rdquo; to confirm
+                              ✅ Payment done — now click &ldquo;Place Order&rdquo; below
                             </div>
+                          ) : gpayPending ? (
+                            <>
+                              <div className="op-gpay-waiting">
+                                <span className="op-spinner-sm op-spinner-blue" />
+                                Waiting for you to complete payment in GPay…
+                              </div>
+                              <p className="op-gpay-note">
+                                Complete the payment in GPay, then return to this page
+                              </p>
+                              <button
+                                type="button"
+                                className="op-gpay-manual-btn"
+                                onClick={() => { setGpayDone(true); setGpayPending(false); }}
+                              >
+                                ✓ I've completed the payment
+                              </button>
+                            </>
                           ) : (
                             <button
                               type="button"
@@ -433,19 +485,19 @@ export default function OrderPage() {
                               onClick={handleOpenGpay}
                             >
                               <span className="op-gpay-logo">G</span>
-                              Open Google Pay &mdash; ₹{totalAmount.toFixed(2)}
+                              Pay ₹{totalAmount.toFixed(2)} via Google Pay
                             </button>
                           )}
 
-                          {!gpayDone && (
+                          {!gpayDone && !gpayPending && (
                             <>
                               <p className="op-gpay-note">
-                                Opens the GPay app · Complete payment · Return here to confirm your order
+                                Tapping above opens GPay · Pay the farmer · Return here to confirm
                               </p>
                               <button
                                 type="button"
                                 className="op-gpay-manual-btn"
-                                onClick={() => setGpayDone(true)}
+                                onClick={() => { setGpayDone(true); setGpayPending(false); }}
                               >
                                 I've already paid via GPay
                               </button>
